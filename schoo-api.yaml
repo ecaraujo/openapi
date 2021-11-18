@@ -1,0 +1,83 @@
+openapi: 3.0.1
+info:
+  title: school-api
+  description: "API para listagem de dados de estudantes"
+  termsOfService: https://ftd.com.br
+  contact:
+    name: Team Arquitetura FTD
+    email: arquitetura.ti@ftd.com.br
+  license:
+    name: FTD Educação
+    url: https://ftd.com.br
+  version: 1.0.0
+servers:
+  - url: https://backend-dev.ftd.com.br/school-api/v1
+  - url: https://backend-hml.ftd.com.br/school-api/v1
+  - url: https://backend-prd.ftd.com.br/school-api/v1
+tags:
+  - name: students
+    description: "Information of the students"
+paths:
+  '/students':
+    get:
+      tags:
+        - students
+      summary: "List students."
+      description: "Returns a list of students."
+      operationId: getStudent
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  students:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Student'
+                          
+        500:
+          description: "Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Student:
+      type: object
+      properties:
+        guid:
+          type: string
+          description: "Universal identifier of one user"
+          example: "8ddabb72-fe44-44d2-90e7-e7fe14e12dcf"
+        name:
+          type: string
+          description: "Name of one user"
+          example: "João Silva"
+        class:
+          type: string
+          description: "Class of one user"
+          example: "3o Ano B"
+    
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: "Internal error code"
+          example: "500 - Server Error"
+        message:
+          type: string
+          description: "Error message"
+          example: "Internal error code"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
